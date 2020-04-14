@@ -9,11 +9,11 @@ task_name = 'chat_parsing_assemble'
 
 cron = '*/5 * * * *'
 
-prod_host = ['212.129.164.50', '211.159.248.106']
+prod_host = ['212.129.164.50', '211.159.248.106']*5
 url = 'http://{}:9003/nlp_service/level_2/deal/parsing'
 test_url = 'http://{}:9016/nlp_service/level_2/deal/parsing'
 
-test_host = ['212.64.103.59']
+test_host = ['212.64.103.59']*5
 
 data = {
         "from_id": "AF611D6BCDC6C3C0598F407AC027EB3F",
@@ -141,20 +141,19 @@ def run():
     str_date = datetime.datetime.now().strftime("%Y/%m/%d")
     data['token'] = token(data['content'] + str_date)
     for host in test_host:
-        for _ in range(5):
-            result = requests.post(test_url.format(host), json=data).json()
-            write_log(task_name, json.dumps(result, ensure_ascii=False))
-            try:
-                assert result['status'] == 0
-                assert check_result(result)
-            except AssertionError:
-                to = ['rxy@qtrade.com.cn']
-                cc = ['abcdefghijkl_mnopq@163.com']
-                subject = '成交项目异常'
-                html_content = '成交项目解析结果异常222'
-                mime_charset = 'utf8'
-                send_eamil(to, subject, html_content, retry=3, cc=cc, mime_charset=mime_charset)
-                exit(0)
+        result = requests.post(test_url.format(host), json=data).json()
+        write_log(task_name, json.dumps(result, ensure_ascii=False))
+        try:
+            assert result['status'] == 0
+            assert check_result(result)
+        except AssertionError:
+            to = ['rxy@qtrade.com.cn']
+            cc = ['abcdefghijkl_mnopq@163.com']
+            subject = '成交项目异常'
+            html_content = '成交项目解析结果异常222'
+            mime_charset = 'utf8'
+            send_eamil(to, subject, html_content, retry=3, cc=cc, mime_charset=mime_charset)
+            break
 
     #return result
 
