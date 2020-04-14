@@ -7,7 +7,7 @@ import json
 
 task_name = 'chat_parsing_assemble'
 
-cron = '*/5 * * * *'
+cron = '0 20 * * *'
 
 prod_host = ['212.129.164.50', '211.159.248.106']*5
 url = 'http://{}:9003/nlp_service/level_2/deal/parsing'
@@ -140,8 +140,8 @@ def token(s):
 def run():
     str_date = datetime.datetime.now().strftime("%Y/%m/%d")
     data['token'] = token(data['content'] + str_date)
-    for host in test_host:
-        result = requests.post(test_url.format(host), json=data).json()
+    for host in prod_host:
+        result = requests.post(url.format(host), json=data).json()
         write_log(task_name, json.dumps(result, ensure_ascii=False))
         try:
             assert result['status'] == 0
