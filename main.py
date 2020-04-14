@@ -52,17 +52,20 @@ def scheduler_task():
             job = scheduler.add_job(run_task, CronTrigger.from_crontab(cron), kwargs={'name': k, 'module': v[0]})
             v[1] = 'schedule'
             v.append(job.id)
+            write_log('main', 'creat new job ===> name: ' + k + '===> cron: ' + cron)
         elif v[1] == 'update':
             scheduler.remove_job(v[3])
             cron = getattr(v[0], 'cron')
             job = scheduler.add_job(run_task, CronTrigger.from_crontab(cron), kwargs={'name': k, 'module': v[0]})
             v[1] = 'schedule'
             v[3] = job.id
+            write_log('main', 'update job ===> name: ' + k + '===> cron: ' + cron)
         elif v[1] == 'stop':
             scheduler.remove_job(v[3])
             stop_tasks.append(k)
     for stop_task in stop_tasks:
         scheduler_dict.pop(stop_task)
+        write_log('main', 'stop job ===> name: ' + stop_task)
     write_log('main', 'scheduler task done!')
 
 
