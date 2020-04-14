@@ -27,7 +27,7 @@ start() {
 }
 
 stop() {
-    echo "开始停止模型..."
+    echo "开始停止任务..."
     if [ -e $pidFile ]; then
         while read line
         do
@@ -36,7 +36,7 @@ stop() {
 
         rm -rf _pid
     fi
-    echo "模型已停止."
+    echo "任务已停止."
 }
 
 check
