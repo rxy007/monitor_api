@@ -7,6 +7,9 @@ from logger_util import write_log
 from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+with open('_pid', 'w') as f:
+    f.write(str(os.getpid()))
+
 
 scheduler_dict = {}
 tasks = []
