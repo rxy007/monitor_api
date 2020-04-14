@@ -8,7 +8,7 @@ from apscheduler.schedulers.tornado import TornadoScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 with open('_pid', 'w') as f:
-    f.write(str(os.getpid()))
+    f.write(str(os.getpid()) + '\n')
 
 
 scheduler_dict = {}
