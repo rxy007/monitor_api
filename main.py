@@ -27,7 +27,7 @@ def get_task(path='tasks'):
             scheduler_dict[task] = [module, 'new', last_change_time]
             tasks.append(task)
         elif scheduler_dict[task][2] < last_change_time:
-            module = importlib.reload(task)
+            module = importlib.reload(scheduler_dict[task][0])
             scheduler_dict[task][0] = module
             scheduler_dict[task][1] = 'update'
             scheduler_dict[task][2] = last_change_time
