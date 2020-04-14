@@ -4,4 +4,24 @@
 
 ## 定时监控的实现参考tasks下现有的例子 其中cron 和 run这两个属性是必须的 
 
-## 
+## 部署方式
+
+source /opt/envir/minicoda3/bin/activate
+
+###开始任务
+
+./deploy
+
+./deploy start
+
+###重新开始
+
+./deploy restart
+
+
+###停止任务
+
+./deploy stop
+#### 此项目已经部署到测试环境的/opt/monitor_api目录下了
+
+
