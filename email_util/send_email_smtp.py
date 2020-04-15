@@ -1,4 +1,5 @@
 from email_util import conf
+from logger_util import write_log
 import smtplib
 import os
 from past.builtins import basestring
@@ -124,10 +125,10 @@ def send_eamil(to, subject, html_content, retry=1,
                files=None, dryrun=False, cc=None, bcc=None,
                mime_subtype='mixed', mime_charset='us-ascii', **kwargs):
     for _ in range(retry):
-        print('发送邮件...')
+        write_log('main', '发送邮件...')
         try:
             _send_email(to, subject, html_content, cc=cc, mime_charset=mime_charset)
-            print('发送邮件成功')
+            write_log('main', '发送邮件成功')
             break
         except:
             pass
