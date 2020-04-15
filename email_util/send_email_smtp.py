@@ -124,13 +124,14 @@ def _send_email(to, subject, html_content,
 def send_eamil(to, subject, html_content, retry=1,
                files=None, dryrun=False, cc=None, bcc=None,
                mime_subtype='mixed', mime_charset='us-ascii', **kwargs):
-    for _ in range(retry):
+    for i in range(retry):
         write_log('main', '发送邮件...')
         try:
             _send_email(to, subject, html_content, cc=cc, mime_charset=mime_charset)
             write_log('main', '发送邮件成功')
             break
         except:
+            write_log('main', '发送邮件失败 ==> ' + str(i+1) + ', 最多尝试 ==> ' + str(retry))
             pass
 
 
