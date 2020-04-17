@@ -22,6 +22,6 @@ source /opt/envir/minicoda3/bin/activate
 ###停止任务
 
 ./deploy stop
-#### 此项目已经部署到测试环境的/opt/monitor_api目录下了
+#### 此项目已经部署到新测试环境的/appletree/nlp_service/service/monitor_api目录下了
 
 
