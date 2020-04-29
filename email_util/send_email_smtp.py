@@ -13,15 +13,8 @@ except ImportError:
     from collections import Iterable as CollectionIterable
 
 
-def send_email_smtp(to, subject, html_content, files=None,
-                    dryrun=False, cc=None, bcc=None,
-                    mime_subtype='mixed', mime_charset='us-ascii',
-                    **kwargs):
-    """
-    Send an email_util with html content
-
-    >>> send_email('test@example.com', 'foo', '<b>Foo</b> bar', ['/dev/null'], dryrun=True)
-    """
+def send_email_smtp(to, subject, html_content, files=None, dryrun=False, cc=None, bcc=None, mime_subtype='mixed',
+                    mime_charset='us-ascii', **kwargs):
     smtp_mail_from = conf.smtp_mail_from
 
     to = get_email_address_list(to)
@@ -60,7 +53,6 @@ def send_email_smtp(to, subject, html_content, files=None,
 
 
 def send_MIME_email(e_from, e_to, mime_msg, dryrun=False):
-    # log = LoggingMixin().log
 
     SMTP_HOST = conf.smtp_host
     SMTP_PORT = conf.smtp_port
@@ -75,10 +67,6 @@ def send_MIME_email(e_from, e_to, mime_msg, dryrun=False):
             s.starttls()
         if SMTP_USER and SMTP_PASSWORD:
             s.login(SMTP_USER, SMTP_PASSWORD)
-        # log.info("Sent an alert email_util to %s", e_to)
-        # print(e_from)
-        # print(e_to)
-        # print(mime_msg.as_string())
         s.sendmail(e_from, e_to, mime_msg.as_string())
         s.quit()
 
@@ -96,7 +84,7 @@ def get_email_address_list(addresses):
     raise TypeError("Unexpected argument type: Received '{}'.".format(received_type))
 
 
-def _get_email_list_from_str(addresses):  # type: (str) -> List[str]
+def _get_email_list_from_str(addresses):
     delimiters = [",", ";"]
     for delimiter in delimiters:
         if delimiter in addresses:
@@ -104,15 +92,9 @@ def _get_email_list_from_str(addresses):  # type: (str) -> List[str]
     return [addresses]
 
 
-def _send_email(to, subject, html_content,
-               files=None, dryrun=False, cc=None, bcc=None,
-               mime_subtype='mixed', mime_charset='us-ascii', **kwargs):
-    """
-    Send email_util using backend specified in EMAIL_BACKEND.
-    """
-    # path, attr = conf.get('email_util', 'EMAIL_BACKEND').rsplit('.', 1)
-    # module = importlib.import_module(path)
-    # backend = getattr(module, attr)
+def _send_email(to, subject, html_content, files=None, dryrun=False, cc=None, bcc=None, mime_subtype='mixed',
+                mime_charset='us-ascii', **kwargs):
+
     to = get_email_address_list(to)
     to = ", ".join(to)
 
@@ -121,13 +103,13 @@ def _send_email(to, subject, html_content,
                    mime_subtype=mime_subtype, mime_charset=mime_charset, **kwargs)
 
 
-def send_eamil(to, subject, html_content, retry=1,
-               files=None, dryrun=False, cc=None, bcc=None,
-               mime_subtype='mixed', mime_charset='us-ascii', **kwargs):
+def send_eamil(to, subject, html_content, retry=1, files=None, dryrun=False, cc=None, bcc=None, mime_subtype='mixed',
+               mime_charset='us-ascii', **kwargs):
     for i in range(retry):
         write_log('main', '发送邮件...')
         try:
-            _send_email(to, subject, html_content, cc=cc, mime_charset=mime_charset)
+            _send_email(to, subject, html_content, files=files, dryrun=dryrun, cc=cc, bcc=bcc,
+                        mime_subtype=mime_subtype, mime_charset=mime_charset, **kwargs)
             write_log('main', '发送邮件成功')
             break
         except:
@@ -136,9 +118,9 @@ def send_eamil(to, subject, html_content, retry=1,
 
 
 if __name__ == '__main__':
-    to = ['rxy@qtrade.com.cn']
-    cc = ['abcdefghijkl_mnopq@163.com']
-    subject = '成交项目异常'
-    html_content = '成交项目解析结果异常'
+    to = []
+    cc = []
+    subject = ''
+    html_content = ''
     mime_charset = 'utf8'
     _send_email(to, subject, html_content, cc=cc, mime_charset=mime_charset)

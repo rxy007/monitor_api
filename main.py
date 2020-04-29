@@ -48,14 +48,14 @@ def scheduler_task():
     stop_tasks = []
     for k, v in scheduler_dict.items():
         if v[1] == 'new':
-            cron = getattr(v[0], 'cron')
+            cron = v[0].task.cron
             job = scheduler.add_job(run_task, CronTrigger.from_crontab(cron), kwargs={'name': k, 'module': v[0]})
             v[1] = 'schedule'
             v.append(job.id)
             write_log('main', 'creat new job ===> name: ' + k + '===> cron: ' + cron)
         elif v[1] == 'update':
             scheduler.remove_job(v[3])
-            cron = getattr(v[0], 'cron')
+            cron = v[0].task.cron
             job = scheduler.add_job(run_task, CronTrigger.from_crontab(cron), kwargs={'name': k, 'module': v[0]})
             v[1] = 'schedule'
             v[3] = job.id
@@ -70,7 +70,7 @@ def scheduler_task():
 
 
 def run_task(name, module):
-    run_function = getattr(module, 'run')
+    run_function = module.task
     write_log('main', 'start run task===> ' + name)
     run_function()
     write_log('main', 'task done ===> ' + name)
